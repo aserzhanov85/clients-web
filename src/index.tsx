@@ -4,7 +4,7 @@ import CssBaseline from '@mui/material/CssBaseline';
 import { ThemeProvider } from '@mui/material/styles';
 import theme from './theme';
 import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
-import ClientsRoute, { clientsLoader } from './routes/ClientsRoute';
+import ClientsRoute, { clientsLoader, createClientAction } from './routes/ClientsRoute';
 import ClientRoute, { clientLoader } from './routes/ClientRoute';
 import ClientUpdateRoute, { updateClientAction } from './routes/ClientUpdateRoute';
 import ErrorPage from './routes/ErrorPage';
@@ -18,7 +18,7 @@ const router = createBrowserRouter(
         path="/" 
         element={<ClientsRoute/>}
         loader={clientsLoader}
-        // action={createClient}
+        action={createClientAction}
         errorElement={<ErrorPage />}
       >
         <Route path='/clients'>

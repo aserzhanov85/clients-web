@@ -37,6 +37,13 @@ export async function getClient(id:string): Promise<ClientData | undefined> {
     return clientList.find(client => client.id === id);
 }
 
+export async function createClient(): Promise<ClientData> {
+    const id: number = clientList.length + 1;
+    const client: ClientData = { id: id.toString(), firstName: "New Client First Name", lastName: "New Client LastName" };
+    clientList.push(client);
+    return client;
+}
+
 export async function addClient(client: ClientData): Promise<void> {
     clientList.push(client);
 }
