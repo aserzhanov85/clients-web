@@ -1,9 +1,10 @@
 import { Button, Paper, Stack, TextField } from "@mui/material";
-import { Form, Link, useLoaderData } from "react-router-dom";
+import { Form, useLoaderData, useNavigate } from "react-router-dom";
 import { ClientData } from "../services/ClientService";
 
 export default function ClientUpdate() {
     const { client } = useLoaderData() as { client: ClientData };
+    const navigate = useNavigate();
     return (
         <Paper>
             <Form method="post" id="client-form">
@@ -28,9 +29,11 @@ export default function ClientUpdate() {
                     />
                     <Stack direction="row">
                         <Button type="submit">Save</Button>
-                        <Link to={`../${client.id}`}>
-                            <Button color = "error">Cancel</Button>
-                        </Link>
+                        <Button type="button"
+                            onClick={() => {
+                                navigate(-1);
+                            }} 
+                            color = "error">Cancel</Button>
                     </Stack>
                 </Stack>
             </Form>
