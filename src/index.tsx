@@ -1,19 +1,51 @@
-import React from 'react';
-import ReactDOM from 'react-dom/client';
-import './index.css';
-import App from './App';
-import reportWebVitals from './reportWebVitals';
+import * as React from 'react';
+import * as ReactDOM from 'react-dom/client';
+import CssBaseline from '@mui/material/CssBaseline';
+import { ThemeProvider } from '@mui/material/styles';
+import theme from './theme';
+import { createBrowserRouter, createRoutesFromElements, Route, RouterProvider } from 'react-router-dom';
+import ClientsRoute, { clientsLoader } from './routes/ClientsRoute';
+import ClientRoute, { clientLoader } from './routes/ClientRoute';
+import ClientUpdateRoute, { updateClientAction } from './routes/ClientUpdateRoute';
+import ErrorPage from './routes/ErrorPage';
 
-const root = ReactDOM.createRoot(
-  document.getElementById('root') as HTMLElement
+const rootElement = document.getElementById('root');
+const root = ReactDOM.createRoot(rootElement!);
+
+const router = createBrowserRouter(
+  createRoutesFromElements(
+      <Route 
+        path="/" 
+        element={<ClientsRoute/>}
+        loader={clientsLoader}
+        // action={createClient}
+        errorElement={<ErrorPage />}
+      >
+        <Route path='/clients'>
+          <Route 
+            path="/clients/:clientId" 
+            element={<ClientRoute/>}
+            loader={clientLoader}
+            //action={clientAction}
+          />
+          <Route 
+            path="/clients/:clientId/update" 
+            element={<ClientUpdateRoute/>}
+            loader={clientLoader}
+            action={updateClientAction}
+          />
+          <Route 
+            path="/clients/:clientId/remove" 
+            // action={removeClientAction}
+          />
+        </Route>
+      </Route>
+  )
 );
+
 root.render(
-  <React.StrictMode>
-    <App />
-  </React.StrictMode>
+  <ThemeProvider theme={theme}>
+    <CssBaseline />
+    <RouterProvider router={ router }/>
+  </ThemeProvider>
 );
-
-// If you want to start measuring performance in your app, pass a function
-// to log results (for example: reportWebVitals(console.log))
-// or send to an analytics endpoint. Learn more: https://bit.ly/CRA-vitals
-reportWebVitals();
