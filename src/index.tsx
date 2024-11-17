@@ -8,6 +8,7 @@ import ClientsRoute, { clientsLoader, createClientAction } from './routes/Client
 import ClientRoute, { clientLoader } from './routes/ClientRoute';
 import ClientUpdateRoute, { updateClientAction } from './routes/ClientUpdateRoute';
 import ErrorPage from './routes/ErrorPage';
+import { removeClientAction } from './routes/ClientRemoveRoute';
 
 const rootElement = document.getElementById('root');
 const root = ReactDOM.createRoot(rootElement!);
@@ -36,7 +37,7 @@ const router = createBrowserRouter(
           />
           <Route 
             path="/clients/:clientId/remove" 
-            // action={removeClientAction}
+            action={removeClientAction}
           />
         </Route>
       </Route>

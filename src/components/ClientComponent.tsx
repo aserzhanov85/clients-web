@@ -44,17 +44,8 @@ export default function Client() {
                         <Button type="submit">Edit</Button>
                     </Form>
                     <Form method="post" action="remove">
-                        <Button color = "error">Remove</Button>
+                        <Button type="submit" color = "error">Remove</Button>
                     </Form>
-                    {/* onSubmit={(event) => {
-              if (
-                !confirm(
-                  "Please confirm you want to delete this record."
-                )
-              ) {
-                event.preventDefault();
-              }
-            }} */}
                 </Stack>
             </Stack>
         </Paper>

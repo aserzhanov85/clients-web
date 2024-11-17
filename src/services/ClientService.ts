@@ -29,8 +29,12 @@ const clientList: ClientData[] = [
     }
 ];
 
-export async function getAllClients(): Promise<ClientData[]> {
-    return clientList;
+export async function getAllClients(filter?: string): Promise<ClientData[]> {
+    if (filter !== undefined) {
+        return clientList.filter(client => client.firstName.indexOf(filter) >= 0 || client.lastName.indexOf(filter) >= 0)
+    } else {
+        return clientList;
+    }
 }
 
 export async function getClient(id:string): Promise<ClientData | undefined> {
@@ -55,6 +59,13 @@ export async function updateClient(id:string, client: ClientData) : Promise<void
         clientList[index] = client;
     } else {
         throw new Error("The updated client was not found")
+    }
+}
+
+export async function removeClient(id:string) {
+    const index: number = clientList.findIndex((client: ClientData) => client.id === id);
+    if (index >= 0) {
+        clientList.splice(index, 1);
     }
 }
 

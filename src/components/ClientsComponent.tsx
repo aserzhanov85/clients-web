@@ -9,7 +9,9 @@ export default function Clients() {
         <Stack direction={"row"} spacing={2}>
             <Stack direction={"column"} spacing={2}>
                 <Stack direction={"row"}>
-                    <TextField variant="outlined" />
+                    <Form id="search-form" role="search">
+                        <TextField name="filter" variant="outlined" />
+                    </Form>
                     <Form method="post">
                         <Button type="submit">Add</Button>
                     </Form>
