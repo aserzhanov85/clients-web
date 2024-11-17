@@ -24,7 +24,10 @@ export default function Clients() {
                             value={query?? ""} 
                             onChange={(e) => {
                                 setQuery(e.target.value);
-                                submit(e.currentTarget.form);
+                                const isFirstSearch = query == undefined;
+                                submit(e.currentTarget.form, {
+                                    replace: !isFirstSearch,
+                                });
                             }}
                         />
                     </Form>
