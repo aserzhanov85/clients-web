@@ -1,11 +1,12 @@
 import { Button, List, ListItem, ListItemIcon, ListItemText, Stack, TextField } from "@mui/material";
-import { Form, Link, Outlet, useLoaderData } from "react-router-dom";
+import { Form, Link, Outlet, useLoaderData, useSubmit } from "react-router-dom";
 import PermIdentityOutlinedIcon from '@mui/icons-material/PermIdentityOutlined';
 import { ClientData } from "../services/ClientService";
 import { useEffect, useState } from "react";
 
 export default function Clients() {
     const { clients, filter } = useLoaderData() as { clients: ClientData[], filter: string | undefined};
+    const submit = useSubmit();
     const [query, setQuery] = useState(filter);
 
     useEffect(() => {
@@ -23,7 +24,8 @@ export default function Clients() {
                             value={query?? ""} 
                             onChange={(e) => {
                                 setQuery(e.target.value);
-                            }} 
+                                submit(e.currentTarget.form);
+                            }}
                         />
                     </Form>
                     <Form method="post">
