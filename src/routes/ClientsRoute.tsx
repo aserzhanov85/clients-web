@@ -7,7 +7,7 @@ export async function clientsLoader({ request }: any) {
     const url = new URL(request.url);
     const filter = url.searchParams.get("filter") ?? undefined;
     const clients = await getAllClients(filter);
-    return { clients };
+    return { clients, filter };
 }
 
 export async function createClientAction() {
