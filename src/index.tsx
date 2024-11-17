@@ -22,23 +22,24 @@ const router = createBrowserRouter(
         action={createClientAction}
         errorElement={<ErrorPage />}
       >
-        <Route path='/clients'>
-          <Route 
-            path="/clients/:clientId" 
-            element={<ClientRoute/>}
-            loader={clientLoader}
-            //action={clientAction}
-          />
-          <Route 
-            path="/clients/:clientId/update" 
-            element={<ClientUpdateRoute/>}
-            loader={clientLoader}
-            action={updateClientAction}
-          />
-          <Route 
-            path="/clients/:clientId/remove" 
-            action={removeClientAction}
-          />
+        <Route errorElement={<ErrorPage />}>
+          <Route path='/clients'>
+            <Route 
+              path="/clients/:clientId" 
+              element={<ClientRoute/>}
+              loader={clientLoader}
+            />
+            <Route 
+              path="/clients/:clientId/update" 
+              element={<ClientUpdateRoute/>}
+              loader={clientLoader}
+              action={updateClientAction}
+            />
+            <Route 
+              path="/clients/:clientId/remove" 
+              action={removeClientAction}
+            />
+          </Route>
         </Route>
       </Route>
   )

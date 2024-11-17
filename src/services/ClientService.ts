@@ -37,8 +37,13 @@ export async function getAllClients(filter?: string): Promise<ClientData[]> {
     }
 }
 
-export async function getClient(id:string): Promise<ClientData | undefined> {
-    return clientList.find(client => client.id === id);
+export async function getClient(id:string): Promise<ClientData> {
+    const client = clientList.find(client => client.id === id);
+    if (client == undefined) {
+        throw new Error("Client was not found");
+    } else {
+        return client;
+    }
 }
 
 export async function createClient(): Promise<ClientData> {
