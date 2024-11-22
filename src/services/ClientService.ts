@@ -1,77 +1,118 @@
 export interface ClientData {
-    id: string,
+    id?: string,
     firstName: string,
     secondName?: string,
     lastName: string,
     birthDate?: string
 }
 
-const clientList: ClientData[] = [
-    {
-        id: "1",
-        firstName: "Alexandr",
-        lastName:"Serzhanov"
-    },
-    {
-        id: "2",
-        firstName: "Sergey",
-        lastName:"Mazunin"
-    },
-    {
-        id: "3",
-        firstName: "Eduard",
-        lastName:"Naumov"
-    },
-    {
-        id: "4",
-        firstName: "Iliya",
-        lastName:"Usukevich"
-    }
-];
+const BACK_HOST: string = "http://localhost:8080";
 
 export async function getAllClients(filter?: string): Promise<ClientData[]> {
-    if (filter !== undefined) {
-        return clientList.filter(client => client.firstName.indexOf(filter) >= 0 || client.lastName.indexOf(filter) >= 0)
-    } else {
-        return clientList;
+    try {
+        const response = await fetch(`${BACK_HOST}/clients`, {
+          method: 'GET',
+        //   mode: 'no-cors',
+          headers: {
+            Accept: 'application/json'
+          }
+        });
+    
+        if (!response.ok) {
+          throw new Error(`Error on clients request, status: ${response.status}`);
+        }
+    
+        const clientList: ClientData[] = (await response.json()) as ClientData[];
+    
+        console.log('Clients were found: ', JSON.stringify(clientList, null, 4));
+
+        //TODO Перенести фильтрацию на бэк
+        if (filter !== undefined) {
+            return clientList.filter(client => client.firstName.indexOf(filter) >= 0 || client.lastName.indexOf(filter) >= 0)
+        } else {
+            return clientList;
+        }
+    } catch (error) {
+        console.log(error);
+        throw error;
     }
 }
 
-export async function getClient(id:string): Promise<ClientData> {
-    const client = clientList.find(client => client.id === id);
-    if (client == undefined) {
-        throw new Error("Client was not found");
-    } else {
+export async function getClient(id:string): Promise<ClientData> {    
+    try {
+        const response = await fetch(`${BACK_HOST}/clients/${id}`, {
+          method: 'GET',
+          headers: {
+            Accept: 'application/json'
+          }
+        });
+    
+        if (!response.ok) {
+          throw new Error(`Client was not found, status: ${response.status}`);
+        }
+    
+        const client: ClientData = (await response.json()) as ClientData;
+    
+        console.log('Client was found: ', JSON.stringify(client, null, 4));
+
         return client;
+    } catch (error) {
+        console.log(error);
+        throw error;
     }
 }
 
 export async function createClient(): Promise<ClientData> {
-    const id: number = clientList.length + 1;
-    const client: ClientData = { id: id.toString(), firstName: "New Client First Name", lastName: "New Client LastName" };
-    clientList.push(client);
-    return client;
-}
+    try {
+        const newClient: ClientData = { 
+            firstName: "New Client First Name", 
+            secondName: "New Client SecondName", 
+            lastName: "New Client LastName" 
+        };
+    
+        const response = await fetch(`${BACK_HOST}/clients`, {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json;charset=utf-8'
+            },
+            body: JSON.stringify(newClient)
+        });
 
-export async function addClient(client: ClientData): Promise<void> {
-    clientList.push(client);
+        if (!response.ok) {
+            throw new Error(`Client was not created, status: ${response.status}`);
+          }
+      
+          const client: ClientData = (await response.json()) as ClientData;
+    
+          console.log('Client was created: ', JSON.stringify(client, null, 4));
+  
+          return client;
+    } catch (error) {
+        console.log(error);
+        throw error;
+    }
 }
 
 export async function updateClient(id:string, client: ClientData) : Promise<void> {
-    const index: number = clientList.findIndex((client: ClientData) => client.id === id);
-    if (index >= 0) {
-        client.id = id;
-        clientList[index] = client;
-    } else {
-        throw new Error("The updated client was not found")
-    }
+    //TODO Починить костыли
+    client.id = id;
+    client.secondName = "secondName";
+
+    await fetch(`${BACK_HOST}/clients/${id}`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json;charset=utf-8'
+        },
+        body: JSON.stringify(client)
+    })
+    .catch(error => { console.log(error); throw error; });
 }
 
-export async function removeClient(id:string) {
-    const index: number = clientList.findIndex((client: ClientData) => client.id === id);
-    if (index >= 0) {
-        clientList.splice(index, 1);
-    }
+export async function removeClient(id:string) : Promise<void> {
+    await fetch(`${BACK_HOST}/clients/${id}`, {
+        method: 'DELETE',
+    })
+    .catch(error => { console.log(error); throw error; });
 }
 
 export default {};
